@@ -1,0 +1,5 @@
+<library path="lib/libfastrack_local_planner_lib">
+  <class name="fastrack_local_planner/FastrackLocalPlanner" type="fastrack_local_planner::FastrackLocalPlanner" base_class_type="nav_core::BaseLocalPlanner">
+    <description>This is a fastrack local planner.</description>
+  </class>
+</library>

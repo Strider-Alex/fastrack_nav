@@ -1,0 +1,25 @@
+<!--  Launch file for signle robot on Gazebo -->
+<launch>
+<env name="GAZEBO_RESOURCE_PATH" value="$(find fastrack_nav)/launch/includes/meshes"/>
+<include file="$(find gazebo_ros)/launch/empty_world.launch">
+<arg name="use_sim_time" value="true"/>
+<arg name="debug" value="false"/>
+<arg name="world_name" value="$(find fastrack_nav)/launch/includes/worlds/house.world"/>
+</include>
+
+
+<include file="$(find fastrack_nav)/launch/includes/robot.launch.xml">
+<arg name="robot_name" value=""/>
+<arg name="init_pose" value="-x 0.0 -y 0.0 -z 0.0"/>
+</include>
+
+<include file="$(find fastrack_nav)/launch/includes/move_baseSafe.launch">
+<arg name="namespace" value=""/>
+</include> 
+
+<node pkg="rviz" type="rviz" name="rviz" args="-d $(find fastrack_nav)/launch/includes/rviz_config/simple.rviz">
+</node>
+
+</launch>
+
+
