@@ -60,8 +60,8 @@ using dynamics::Dynamics;
 using dynamics::RelativeDynamics;
 using state::RelativeState;
 
-template <typename TS, typename TC, typename TD, typename PS, typename PC,
-          typename PD, typename B>
+template <typename TS, typename TC, typename TB, typename PS, typename PC,
+          typename PB, typename B>
 class ValueFunction : private Uncopyable {
  public:
   virtual ~ValueFunction() {}
@@ -98,14 +98,14 @@ class ValueFunction : private Uncopyable {
 
     return relative_dynamics_->OptimalControl(
         tracker_x, planner_x, *Gradient(tracker_x, planner_x),
-        tracker_dynamics_.GetControlBound(),
-        planner_dynamics_.GetControlBound());
+        tracker_bounds_,
+        planner_bounds_);
   }
 
   // Accessors.
   inline const B& TrackingBound() const { return bound_; }
-  inline const TD& TrackerDynamics() const { return tracker_dynamics_; }
-  inline const PD& PlannerDynamics() const { return planner_dynamics_; }
+  inline const TB& TrackerBounds() const { return tracker_bounds_; }
+  inline const PB& PlannerBounds() const { return planner_bounds_; }
   inline const RelativeDynamics<TS, TC, PS, PC>& GetRelativeDynamics() const {
     if (!initialized_)
       throw std::runtime_error("Uninitialized call to GetRelativeDynamics.");
@@ -126,12 +126,10 @@ class ValueFunction : private Uncopyable {
   virtual bool LoadParameters(const ros::NodeHandle& n) { return true; }
   virtual bool RegisterCallbacks(const ros::NodeHandle& n) { return true; }
 
-  // Member variables to be instantiated by derived classes after
-  // reading the necessary parameters from the ROS parameter server.
-  // Keep a copy of the tracker and planner dynamics, and a pointer
-  // to the relative dynamics.
-  TD tracker_dynamics_;
-  PD planner_dynamics_;
+  // control bounds
+  TB tracker_bounds_;
+  PB planner_bounds_;
+
   std::unique_ptr<RelativeDynamics<TS, TC, PS, PC>> relative_dynamics_;
 
   // Keep a copy of the tracking errror bound.
